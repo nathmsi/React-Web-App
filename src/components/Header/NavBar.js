@@ -17,7 +17,7 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Slide from '@material-ui/core/Slide';
 import Grow from '@material-ui/core/Grow';
-
+import PersonIcon from '@material-ui/icons/Person';
 
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
@@ -80,12 +80,16 @@ export default function PrimarySearchAppBar(props) {
     const {
         state: { },
         setOpen,
-        setOpenSH
+        setOpenSH,
+        setOpenUser
     } = React.useContext(ContextNavigation);
 
     const {
         shoppingCart
     } = useSelector(state => state.shoppingCart);
+    const {
+        isAuth
+    } = useSelector(state => state.auth);
 
     const history = useHistory();
     const location = useLocation();
@@ -136,6 +140,17 @@ export default function PrimarySearchAppBar(props) {
                         <SearchIcon color="secondary" />
                     </IconButton>
                     {/* <Divider className={classes.divider} orientation="vertical" /> */}
+                    {isAuth ?
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={() => setOpenUser(true)}
+                            className={classes.iconButton}
+                        >
+                            <PersonIcon color="inherit" />
+                        </IconButton> : null
+                    }
+
 
                     <IconButton
                         color="inherit"

@@ -18,6 +18,8 @@ import AppBar from './appBar';
 
 import DrawerContent from './DrawerContent';
 import DrawerShoppingCart from './DrawerShoppingCart';
+import DrawerUserProfile from './DrawerUserProfile';
+
 
 import NabBar from './NavBar';
 
@@ -98,6 +100,7 @@ const HeaderComponent = (props) => {
                 <DrawerContent toggleDrawer={() => setOpen(false)} isAuth={props.isAuth} signOut={signOut}  />
             </SwipeableDrawer>
             <DrawerShoppingCart />
+            <DrawerUserProfile />
         </>
     )
 }

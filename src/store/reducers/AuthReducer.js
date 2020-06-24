@@ -16,7 +16,7 @@ const INITIAL_STATE = {
     password: '',
     errorMessage: '',
     token: '',
-    loading: false,
+    loading: true,
     user: null,
     success: false,
 };

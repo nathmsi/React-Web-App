@@ -53,7 +53,7 @@ const HomeProducts = (props) => {
         <div className={classes.content}>
             <div className={classes.mainContent}>
                 {loading && <div className={classes.progress}> <LinearProgress color="secondary" /> </div>}
-                {errorMessage && <Typography color="error" align="center"  style={{ marginTop: 50}}>{errorMessage}</Typography>}
+                {errorMessage && <Typography color="error" align="center"  style={{ marginTop: 55}}>{errorMessage}</Typography>}
                 <ListProduct products={products} />
             </div>
 

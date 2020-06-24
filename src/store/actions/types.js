@@ -17,7 +17,8 @@ export const PRODUCTS_MORE_LOADING = 'products_more_loading';
 export const PRODUCT_ADD = 'product_add';
 export const PRODUCT_DELETE = 'product_delete';
 export const PRODUCT_UPDATE = 'product_update';
-
+export const MENU_CATEGORIES_LOADING = 'menu_categorie_loading';
+export const MENU_CATEGORIES_ERROR = 'menu_categories_error';
 
 // Orders
 export const LOAD_ORDERS = 'load_orders';

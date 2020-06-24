@@ -34,7 +34,7 @@ import { Provider as ProviderNavigation } from '../contexts/navigationContext';
 // Context Theme
 import { Context as ThemeContext } from '../contexts/themeContext';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import { Typography, CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     '@global': {
@@ -65,15 +65,12 @@ const useStyles = makeStyles((theme) => ({
     circularProgress: {
         marginTop: 100
     },
-    linearProgressStyle: {
+    linearProgress: {
         position: 'absolute',
-        top: 0,
-        left: 0,
-        rigth: 0,
-        bottom: 0,
+        top: 53,
         width: '100%',
+        left: 0
     },
-
 }));
 
 
@@ -94,9 +91,9 @@ const MiniDrawer = (props) => {
         () => {
             props.tryLocalSignin();
             const dark = localStorage.getItem('dark');
-            console.log(dark);
-            if (dark === 'dark') {
-                theme.toogleDarkMode(true);
+            console.log(`dark = ${dark}`);
+            if (dark === 'not-dark') {
+                theme.toogleDarkMode(false);
             }
         }, [])
 
@@ -104,7 +101,7 @@ const MiniDrawer = (props) => {
     return (
         <MuiThemeProvider theme={createMuiTheme(theme.state.theme)}>
             <ProviderNavigation>
-                <Main isAuth={isAuth} loading={loading} />
+                <Main isAuth={isAuth} loading={loading} loadingMenu={props.loadingMenu}/>
             </ProviderNavigation>
         </MuiThemeProvider>
     );
@@ -113,15 +110,18 @@ const MiniDrawer = (props) => {
 
 const Main = ({
     isAuth,
-    loading
+    loading,
+    loadingMenu
 }) => {
     const classes = useStyles();
-
+    //console.log(loading);
     return (
         <div className={classes.root}>
             <CssBaseline />
             <Header isAuth={isAuth} />
+            {( loading || loadingMenu)  && <div className={classes.linearProgress} ><LinearProgress color="primary" /> </div>}
             <MainRoute />
+
         </div>
     )
 }
@@ -131,7 +131,8 @@ const mapStateToProps = (state, ownProps) => {
     //console.log(state.search);
     return {
         auth: state.auth,
-        isAuth: state.auth.isAuth
+        isAuth: state.auth.isAuth,
+        loadingMenu: state.product.loadingMenu
     };
 }
 

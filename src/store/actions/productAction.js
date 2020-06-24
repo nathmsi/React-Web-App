@@ -4,7 +4,9 @@ import {
     LOAD_NEW_PRODUCTS,
     PRODUCTS_LOADING,
     PRODUCTS_ERROR,
-    MENU_CATEGORIES
+    MENU_CATEGORIES,
+    MENU_CATEGORIES_LOADING,
+    MENU_CATEGORIES_ERROR
 } from './types'
 
 
@@ -42,27 +44,26 @@ export const getProductsHome = (lastID) => {
     };
 };
 
-export const getMenu = (dispatch) => {
+export const getMenu = () => {
     return async (dispatch) => {
         try {
-            //dispatch({ type: 'loading' });
+            dispatch({ type: MENU_CATEGORIES_LOADING });
             let path = '/menu';
             const response = await yelp.get(path);
-            console.log(response.data);
             if (response.data) {
                 const menu = response.data.map(
                     el => el.value
                 )
-                //console.log(menu);
                 dispatch({
                     type: MENU_CATEGORIES,
                     payload: {
                         menu: menu ? [].concat.apply([], menu) : [],
+                        menuCategorie : response.data
                     }
                 });
             } else {
                 dispatch({
-                    type: PRODUCTS_ERROR,
+                    type: MENU_CATEGORIES_ERROR,
                     payload: 'problem to load product'
                 });
             }
@@ -70,7 +71,7 @@ export const getMenu = (dispatch) => {
         catch (error) {
             console.log(error);
             dispatch({
-                type: PRODUCTS_ERROR,
+                type: MENU_CATEGORIES_ERROR,
                 payload: 'problem to load product'
             });
         }

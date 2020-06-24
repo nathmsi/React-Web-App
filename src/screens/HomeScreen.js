@@ -7,7 +7,8 @@ import {
     Card,
     CardMedia,
     Grid,
-    Container
+    Container,
+    LinearProgress
 } from '@material-ui/core';
 
 import useWindowDimention from '../hooks/useWindowsDimention';
@@ -18,14 +19,14 @@ import MenuView from '../components/store/MenuView';
 
 
 // redux
-import { useSelector , useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import {
     getProductsByCategorie,
     getProductsHome
 } from '../store/actions';
 
 
-import { useLocation ,useHistory } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -34,10 +35,10 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.default
     },
     media: {
-        height: props => props.height,
+        height: '50vh',
     },
     card: {
-        position: 'relative',
+        //position: 'relative',
     },
     overlay: {
         position: 'absolute',
@@ -67,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const HomeScreen = (props) => {
+const HomeScreen = () => {
     const {
         width,
         height
@@ -75,21 +76,22 @@ const HomeScreen = (props) => {
     const contentHeight = (height) / 2
     const classes = useStyles({ width, height: contentHeight });
     let history = useHistory();
-    const{
-        menu
+    const {
+        menu , menuCategorie
     } = useSelector(state => state.product);
     const dispatch = useDispatch();
 
 
 
-    const handleSubmit = (menuSelected) =>{
-        if(menuSelected === 'Home'){
+    const handleSubmit = (menuSelected) => {
+        if (menuSelected === 'Home') {
             dispatch(getProductsHome());
-        }else{
+        } else {
             dispatch(getProductsByCategorie(menuSelected));
         }
         history.push('/store/home');
     }
+
 
 
 
@@ -107,16 +109,16 @@ const HomeScreen = (props) => {
                 </div>
             </Card>
             <Container maxWidth="lg" className={classes.container}>
-                <Grid
-                    container
-                    spacing={2}
-                >
-                    {menu.slice(1).map(elem => (
-                    <Grid item xs={width < 1200 ? (width < 900 ? (width < 600 ? 12 : 6) : 4) : 3} key={elem} className={classes.item}>
-                        <MenuView  menu={elem} handleSubmit={(val) => handleSubmit(val)} />
-                    </Grid>
-                    ))}
-                </Grid>
+                        <Grid
+                            container
+                            spacing={2}
+                        >
+                            {menuCategorie.map(elem => (
+                                <Grid item xs={width < 1200 ? (width < 900 ? (width < 600 ? 12 : 6) : 4) : 3} key={elem.categorie} className={classes.item}>
+                                    <MenuView menu={elem.categorie} handleSubmit={(val) => handleSubmit(val)} />
+                                </Grid>
+                            ))}
+                        </Grid>
             </Container>
         </div>
     )

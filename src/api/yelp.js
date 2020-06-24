@@ -3,7 +3,7 @@ import axios from 'axios'
 
 
 const instance = axios.create({
-    baseURL: 'https://us-central1-saba-israel.cloudfunctions.net/webApi/api/v1'
+    baseURL: process.env.REACT_APP_API
 })
 
 
@@ -12,7 +12,7 @@ export const interceptorsAxios = ({ getState }) => (next) => async (action) => {
     const token = getState().auth.token;
     instance.interceptors.request.use(
         (config) => {
-            //console.log('token',token);
+            console.log(`%c ${config.method} ${config.url}`, "color:yellow");
             if (token) {
                 config.headers.Authorization = `Bearer ${token}`
             }

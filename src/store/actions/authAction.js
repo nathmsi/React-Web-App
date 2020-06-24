@@ -97,7 +97,7 @@ export const tryLocalSignin = () => {
             firebase.auth().onAuthStateChanged(
                 async (user) => {
                     if (user) {
-                        console.log('user ', user.email + ' connected');
+                        console.log(`%c ${user.email} connected`, "color:orange");
                         firebase.auth().currentUser.getIdToken(true).then(
                             async (token) => {
                                 dispatch({
@@ -118,7 +118,7 @@ export const tryLocalSignin = () => {
                             type: LOGIN_USER_FAIL,
                             payload: ''
                         });
-                        console.log('not user connected');
+                        console.log(`%c not user connected`, "color:orange");
                     }
                 },
                 (error) => {

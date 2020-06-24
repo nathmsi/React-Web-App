@@ -7,6 +7,8 @@ const ThemeColorReducer = (state, action) => {
             return { ...state,  open: action.payload.open };
         case 'set_sh':
             return { ...state,  openSH: action.payload.openSH };
+        case 'set_user':
+            return { ...state,  openUser: action.payload.open };
         default: return state;
     }
 }
@@ -30,15 +32,26 @@ const setOpenSH = (dispatch) => {
 };
 
 
+const setOpenUser = (dispatch) => {
+    return async (open) => {
+        dispatch({
+            type: 'set_user', payload: { open }
+        });
+    }
+};
+
+
 
 export const { Context, Provider } = createDataContext(
     ThemeColorReducer,
     {
         setOpen,
-        setOpenSH
+        setOpenSH,
+        setOpenUser
     },
     {
         open: false,
-        openSH: false
+        openSH: false,
+        openUser: false
     }
 );

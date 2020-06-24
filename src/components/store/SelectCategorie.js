@@ -56,12 +56,13 @@ function ControlledOpenSelect(props) {
     } = useSelector(state => state.product);
 
     React.useEffect(()=>{
+        //console.log('getMenu()');
         dispatch(getMenu());
     },[]);
 
     const handleChange = (event) => {
         const myLoacation = location.pathname;
-        console.log(myLoacation);
+        //console.log(myLoacation);
         if(event.target.value === 'Home'){
             dispatch(getProductsHome());
         }else{

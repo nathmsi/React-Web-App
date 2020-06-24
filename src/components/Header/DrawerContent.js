@@ -26,6 +26,7 @@ import PaletteIcon from '@material-ui/icons/Palette';
 import CloseIcon from '@material-ui/icons/Close';
 import SelectColorTheme from './SelectColorTheme';
 import SwitchDarkMode from './SwitchDarkMode';
+import ListIcon from '@material-ui/icons/List';
 
 import InfoIcon from '@material-ui/icons/Info';
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
@@ -118,9 +119,13 @@ const ListElementHeader = (props) => {
                 </List>
                 <Divider />
                 <List>
-                    <ListItem onClick={toggleDrawer} component={NavLink} to="/store/home" className={(pathname === '/store/home' || pathname === '') ? classes.navLinkActive : classes.navLink} >
+                <ListItem onClick={toggleDrawer} component={NavLink} to="/" className={(pathname === '/') ? classes.navLinkActive : classes.navLink} >
                         <ListItemIcon> <HomeIcon color="inherit" /></ListItemIcon>
-                        <ListItemText primary={'Home Product'} />
+                        <ListItemText primary={'Home'} />
+                    </ListItem>
+                    <ListItem onClick={toggleDrawer} component={NavLink} to="/store/home" className={(pathname === '/store/home') ? classes.navLinkActive : classes.navLink} >
+                        <ListItemIcon> <ListIcon color="inherit" /></ListItemIcon>
+                        <ListItemText primary={'Products'} />
                     </ListItem>
                     <ListItem onClick={toggleDrawer} component={NavLink} to="/contact" className={(pathname === '/contact') ? classes.navLinkActive : classes.navLink} >
                         <ListItemIcon> <PermContactCalendarIcon color="inherit" /></ListItemIcon>

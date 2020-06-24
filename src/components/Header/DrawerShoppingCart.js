@@ -133,7 +133,7 @@ export default function TemporaryDrawer() {
             let totalCount = 0;
             shoppingCart.forEach(el => totalCount += el.count);
             const totalPrice = shoppingCart.map((el) => (el.price * el.count)).reduce((acc, element) => acc + element);
-            console.log('totalPrice', totalPrice);
+            //console.log('totalPrice', totalPrice);
             setTotal({
                 totalPrice, totalCount
             })

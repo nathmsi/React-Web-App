@@ -18,8 +18,8 @@ import useWindowDimention from '../../hooks/useWindowsDimention';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from "@material-ui/core/IconButton";
 
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-
+import Button from '@material-ui/core/Button';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 
 import { Context as StoreContext } from '../../contexts/StoreContext';
 
@@ -87,14 +87,14 @@ function ProductDialog(props) {
             <DialogTitle id="simple-dialog-title" style={{ paddingBottom: 0, paddingTop: 0 }}>
                 <div className={classes.titleView}>
                     <Typography align="center">
-                        {product.name}
+                        {/* {product.name} */}
                     </Typography>
                     <div className={classes.grow} />
                     <IconButton
                         color="secondary"
                         onClick={onClose}
                     >
-                        <CloseIcon />
+                        <CloseIcon style={{ fontSize: '28px'  }}  />
                     </IconButton>
                 </div>
 
@@ -105,7 +105,7 @@ function ProductDialog(props) {
                         <CardMedia
                             component="img"
                             alt="Contemplative Reptile"
-                            height={height * (2 / 3)}
+                            height={height * (1/2)}
                             width={width}
                             className={classes.img}
                             src={product.photo}
@@ -125,6 +125,15 @@ function ProductDialog(props) {
                             {product.price} ₪
                         </Typography>
                         <div className={classes.grow} />
+                        <Button
+                        onClick={() => {
+                            dispatch(pushToShoppingCart(product));
+                            handleClose();
+                        }}>
+                            <Typography variant="h6" style={{ textTransform: 'none' }}>
+                                Add to shopping cart
+                        </Typography>
+                        </Button>
                         <IconButton
                             color="inherit"
                             onClick={() => {
@@ -132,7 +141,9 @@ function ProductDialog(props) {
                                 handleClose();
                             }}
                         >
-                            <ShoppingCartIcon color="inherit" />
+                            <AddShoppingCartIcon style={{
+                                fontSize: '36px'
+                            }} color="inherit" />
                         </IconButton>
                     </CardActions>
                 </Card>
@@ -154,6 +165,7 @@ export default function ImgMediaCard({ product }) {
                         alt="Contemplative Reptile"
                         height="180"
                         src={product.photo}
+                        className={classes.img}
                         title="Contemplative Reptile"
                     />
                     <CardContent>
