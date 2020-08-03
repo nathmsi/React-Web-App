@@ -15,6 +15,7 @@ import Badge from '@material-ui/core/Badge';
 import EditIcon from '@material-ui/icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 import { IconButton, Typography } from '@material-ui/core';
 
@@ -25,6 +26,7 @@ import 'firebase/storage';
 import 'firebase/auth';
 
 import yelp from '../../api/yelp';
+import { withNamespaces } from 'react-i18next';
 
 // redux
 import { useSelector, useDispatch } from 'react-redux'
@@ -81,10 +83,10 @@ const SmallIcon = withStyles((theme) => ({
     },
 }))(EditIcon);
 
-export default function TemporaryDrawer() {
+function TemporaryDrawer(props) {
     //const [result, setResult] = React.useState(null);
     const [backdrop, setBackdrop] = React.useState(false);
-
+    const [loadingMEdia, setLoadingMedia] = React.useState(true);
 
     const {
         width, height
@@ -111,6 +113,11 @@ export default function TemporaryDrawer() {
     const toggleDrawer = () => {
         setOpenUser(!openUser);
     }
+
+    const handleImageLoaded = () => {
+        setLoadingMedia(false);
+    }
+
 
 
 
@@ -203,27 +210,27 @@ export default function TemporaryDrawer() {
 
 
     return (
-        <Drawer anchor={'right'} open={openUser} onClose={toggleDrawer} style={{ opacity: 0.95 }} >
+        <Drawer anchor={'right'} transitionDuration={500} open={openUser} onClose={toggleDrawer} style={{ opacity: 0.97 }} >
             <div>
                 <List className={classes.titleStyle}>
                     <ListItem className={classes.headerClose} className={classes.titleDrawer} >
                         <ListItemIcon >
                             <IconButton
-                                color="secondary"
                                 onClick={toggleDrawer}
                             >
                                 <CloseIcon />
                             </IconButton>
                         </ListItemIcon>
                         <ListItemText>
-                            <Typography
-                                variant="h6"
-                                color="secondary"
-                                style={{
-                                }}
-                            >
-                                {'User Profile'}
-                            </Typography>
+                            <Button onClick={toggleDrawer} style={{ textTransform: 'none' }}>
+                                <Typography
+                                    variant="h6"
+                                    style={{
+                                    }}
+                                >
+                                    {props.t('User Profile')}
+                                </Typography>
+                            </Button>
                         </ListItemText>
                     </ListItem>
                 </List>
@@ -242,7 +249,7 @@ export default function TemporaryDrawer() {
                                 horizontal: 'right',
                             }}
                             badgeContent={
-                                <Tooltip title="Edit Image" placement="right">
+                                <Tooltip title={props.t("Edit Image")} placement="right">
                                     <Button
                                         component="label"
                                     >
@@ -256,7 +263,8 @@ export default function TemporaryDrawer() {
                                     </Button>
                                 </Tooltip>}
                         >
-                            <Avatar className={classes.avatar} alt={user.displayName ? user.displayName : ''} src={user.photoURL ? user.photoURL : ''} />
+                            {loadingMEdia && <Skeleton variant="circle" className={classes.avatar} />}
+                            <Avatar className={classes.avatar} onLoad={handleImageLoaded} style={{ display: loadingMEdia ? 'none' : 'block' }} alt={user.displayName ? user.displayName : ''} src={user.photoURL ? user.photoURL : ''} />
                         </Badge>
                         <Typography align="center" variant="h5" >
                             {user.displayName ? user.displayName : ''}
@@ -277,3 +285,6 @@ export default function TemporaryDrawer() {
         </Drawer >
     );
 }
+
+
+export default withNamespaces()(TemporaryDrawer);

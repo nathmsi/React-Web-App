@@ -27,7 +27,7 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case PRODUCTS_LOADING:
-            return { ...state, loading: true, errorMessage: '', products: [] }
+            return { ...state, loading: true, errorMessage: '', products: []  , categorieSelected: action.payload.categorieSelected }
         case MENU_CATEGORIES_LOADING:
             return { ...state, loadingMenu: true }
         case LOAD_NEW_PRODUCTS:

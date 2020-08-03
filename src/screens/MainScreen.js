@@ -19,6 +19,9 @@ import Grid from '@material-ui/core/Grid';
 
 import useWindowDimensions from '../hooks/useWindowsDimention';
 
+import detectBrowserLanguage from 'detect-browser-language'
+
+
 import {
     MainRoute
 } from '../components/Route'
@@ -34,7 +37,10 @@ import { Provider as ProviderNavigation } from '../contexts/navigationContext';
 // Context Theme
 import { Context as ThemeContext } from '../contexts/themeContext';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { Typography, CircularProgress } from '@material-ui/core';
+
+import i18n from '../translation/i18n';
+
+import LanguageDetector from 'i18next-browser-languagedetector';
 
 const useStyles = makeStyles((theme) => ({
     '@global': {
@@ -91,17 +97,61 @@ const MiniDrawer = (props) => {
         () => {
             props.tryLocalSignin();
             const dark = localStorage.getItem('dark');
-            console.log(`dark = ${dark}`);
-            if (dark === 'not-dark') {
-                theme.toogleDarkMode(false);
+            const language = localStorage.getItem('language');
+            try {
+                const detectLanguage = detectBrowserLanguage();
+                console.log(detectLanguage);
+                if (language) {
+                    theme.setLanguage(language);
+                } else {
+                    switch (detectLanguage.slice(0, 2)) {
+                        case 'he':
+                            theme.setLanguage('he');
+                            break;
+                        case 'fr':
+                            theme.setLanguage('fr');
+                            break;
+                        default: {
+                            theme.setLanguage('en');
+                            break;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.log(err);
             }
+            console.log(`dark = ${dark}`);
+            switch (dark) {
+                case 'dark':
+                    theme.toogleDarkMode(true);
+                    break;
+                case 'not-dark':
+                    theme.toogleDarkMode(false);
+                    break;
+                default: {
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        console.log('browser is dark mode');
+                        theme.toogleDarkMode(true);
+                    } else {
+                        console.log('browser is light mode');
+                        theme.toogleDarkMode(true);
+                    }
+                    break;
+                }
+            }
+
         }, [])
+
+    useEffect(
+        () => {
+            i18n.changeLanguage(theme.state.language);
+        }, [theme.state.language]);
 
 
     return (
         <MuiThemeProvider theme={createMuiTheme(theme.state.theme)}>
             <ProviderNavigation>
-                <Main isAuth={isAuth} loading={loading} loadingMenu={props.loadingMenu}/>
+                <Main isAuth={isAuth} loading={loading} loadingMenu={props.loadingMenu} />
             </ProviderNavigation>
         </MuiThemeProvider>
     );
@@ -119,7 +169,7 @@ const Main = ({
         <div className={classes.root}>
             <CssBaseline />
             <Header isAuth={isAuth} />
-            {( loading || loadingMenu)  && <div className={classes.linearProgress} ><LinearProgress color="primary" /> </div>}
+            {(loading || loadingMenu) && <div className={classes.linearProgress} ><LinearProgress color="primary" /> </div>}
             <MainRoute />
 
         </div>

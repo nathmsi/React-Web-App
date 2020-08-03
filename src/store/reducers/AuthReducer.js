@@ -17,7 +17,11 @@ const INITIAL_STATE = {
     errorMessage: '',
     token: '',
     loading: true,
-    user: null,
+    user: {
+        displayName: '',
+        email: '',
+        photoURL: ''
+    },
     success: false,
 };
 

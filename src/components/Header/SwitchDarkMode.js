@@ -7,7 +7,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Context } from '../../contexts/themeContext';
 
 
-export default function Switches() {
+export default function Switches(props) {
     const [state, setState] = React.useState(false);
     const themeColor = React.useContext(Context);
 
@@ -46,7 +46,7 @@ export default function Switches() {
                     name="checkedB"
                     inputProps={{ 'aria-label': 'primary checkbox' }}
                 />}
-                label="Dark Mode"
+                label={props.darkMode}
                 labelPlacement="end"
             />
         </div>

@@ -15,7 +15,7 @@ import {
 export const getProductsHome = (lastID) => {
     return async (dispatch) => {
         try {
-            dispatch({ type: PRODUCTS_LOADING });
+            dispatch({ type: PRODUCTS_LOADING , payload: { categorieSelected: 'Home' }  });
             let path = '/Products/list/pagination/' + (lastID ? lastID : 'none');
             const response = await yelp.get(path);
             console.log(response.data);
@@ -82,7 +82,7 @@ export const getMenu = () => {
 export const getProductsByCategorie = (categorieSelected, lastID) => {
     return async (dispatch) => {
         try {
-            dispatch({ type: PRODUCTS_LOADING });
+            dispatch({ type: PRODUCTS_LOADING , payload: { categorieSelected }  });
             const path = '/products/categorie/' + categorieSelected + '/' + (lastID ? lastID : 'none');
             const response = await yelp.get(path);
             console.log(response.data);

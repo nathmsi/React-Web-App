@@ -21,7 +21,11 @@ import IconButton from "@material-ui/core/IconButton";
 import Button from '@material-ui/core/Button';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 
-import { Context as StoreContext } from '../../contexts/StoreContext';
+import SnackBar from '../SnackBar/SnackBar';
+import Skeleton from '@material-ui/lab/Skeleton';
+
+
+import { Context as ThemeContext } from '../../contexts/themeContext';
 
 import { useDispatch } from 'react-redux'
 
@@ -29,10 +33,14 @@ import {
     pushToShoppingCart
 } from '../../store/actions';
 
+import Zoom from '@material-ui/core/Zoom';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="left" ref={ref} {...props} />;
+    return <Zoom direction="left" ref={ref} {...props} />;
 });
+
+import { withNamespaces } from 'react-i18next';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -52,14 +60,22 @@ const useStyles = makeStyles((theme) => ({
     titleView: {
         display: 'flex',
         alignItems: 'center'
+    },
+    actions: {
+        display: 'flex',
+        justifyContent: 'space-between'
+    },
+    contentCard: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: 0
     }
 }));
 
 function ProductDialog(props) {
-    // const{
-    //     pushToShoppingCart
-    // } = React.useContext(StoreContext);
     const dispatch = useDispatch();
+
+    const [loadingMEdia, setLoadingMedia] = React.useState(true);
 
     const {
         width,
@@ -69,82 +85,99 @@ function ProductDialog(props) {
     const {
         onClose,
         product,
-        open
+        setSnack,
+        open,
+        productName
     } = props;
 
     const handleClose = () => {
         onClose();
     };
 
+    const handleAddToShoppingCart = () => {
+        dispatch(pushToShoppingCart(product));
+        setSnack(true);
+        handleClose();
+    }
+
+    const handleImageLoaded = () => {
+        setLoadingMedia(false);
+    }
+
     return (
         <Dialog
             fullWidth={true}
             maxWidth={"xl"}
-            fullScreen={width < 600 ? true : false}
+            fullScreen={width < 600 ? false : false}
             TransitionComponent={Transition}
             onClose={handleClose}
             open={open}>
-            <DialogTitle id="simple-dialog-title" style={{ paddingBottom: 0, paddingTop: 0 }}>
+            {/* <DialogTitle id="simple-dialog-title" style={{ paddingBottom: 0, paddingTop: 0 }}>
                 <div className={classes.titleView}>
                     <Typography align="center">
-                        {/* {product.name} */}
                     </Typography>
                     <div className={classes.grow} />
                     <IconButton
-                        color="secondary"
                         onClick={onClose}
                     >
-                        <CloseIcon style={{ fontSize: '28px'  }}  />
+                        <CloseIcon style={{ fontSize: '28px' }} />
                     </IconButton>
                 </div>
-
-            </DialogTitle>
+            </DialogTitle> */}
             <DialogContent style={{ padding: 0 }}>
                 <Card  >
                     <CardActionArea>
+                        {loadingMEdia && <Skeleton animation="wave" variant="rect" width="100%" height={width> 500 ? height * (0.4) : height * (0.7)} />}
                         <CardMedia
                             component="img"
                             alt="Contemplative Reptile"
-                            height={height * (1/2)}
+                            style={{ display: loadingMEdia ? 'none' : 'block' }}
+                            height={width> 500 ? height * (0.6) : height * (0.7)}
                             width={width}
                             className={classes.img}
                             src={product.photo}
-                            title={product.name}
+                            title={productName}
+                            onLoad={handleImageLoaded}
                         />
                         <CardContent>
-                            <Typography gutterBottom variant="h5" component="h2">
-                                {product.name}
-                            </Typography>
+                            <div className={classes.contentCard}>
+                                <Typography gutterBottom variant="h5" component="h2">
+                                    {productName}
+                                </Typography>
+                                <Typography variant="h4" color="textSecondary" component="p">
+                                    {product.price} ₪
+                                </Typography>
+                            </div>
                             <Typography variant="body2" color="textSecondary" component="p">
                                 {product.description}
                             </Typography>
                         </CardContent>
                     </CardActionArea>
-                    <CardActions>
-                        <Typography variant="h4" color="textSecondary" component="p">
-                            {product.price} ₪
-                        </Typography>
-                        <div className={classes.grow} />
-                        <Button
-                        onClick={() => {
-                            dispatch(pushToShoppingCart(product));
-                            handleClose();
-                        }}>
-                            <Typography variant="h6" style={{ textTransform: 'none' }}>
-                                Add to shopping cart
-                        </Typography>
+                    <CardActions className={classes.actions}>
+                        <Button onClick={handleClose}>
+                            Cancel
                         </Button>
-                        <IconButton
-                            color="inherit"
-                            onClick={() => {
-                                dispatch(pushToShoppingCart(product));
-                                handleClose();
-                            }}
-                        >
-                            <AddShoppingCartIcon style={{
-                                fontSize: '36px'
-                            }} color="inherit" />
-                        </IconButton>
+
+                        <div>
+                            {
+                                width > 500 ?
+                                    <Button
+                                        onClick={() => handleAddToShoppingCart()}>
+                                        <Typography variant="h6" style={{ textTransform: 'none' }}>
+                                           +  {props.t('Shopping Cart')}
+                                </Typography>
+                                    </Button>
+                                    : null
+                            }
+                            <IconButton
+                                color="inherit"
+                                onClick={() => handleAddToShoppingCart()}
+                            >
+                                <AddShoppingCartIcon style={{
+                                    fontSize: '27px'
+                                }} color="inherit" />
+                            </IconButton>
+                        </div>
                     </CardActions>
                 </Card>
             </DialogContent>
@@ -152,31 +185,69 @@ function ProductDialog(props) {
     );
 }
 
-export default function ImgMediaCard({ product }) {
+function ImgMediaCard({ product , t }) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [openSnack, setOpenSnack] = React.useState(false);
+    const [loadingMEdia, setLoadingMedia] = React.useState(true);
+
+    const [productName,setProductName] = React.useState();
+
+    const{
+        state: { language }
+    } = React.useContext(ThemeContext);
+
+    const handleImageLoaded = () => {
+        setLoadingMedia(false);
+    }
+
+
+    React.useEffect(()=>{
+        //console.log(language);
+        switch (language) {
+            case 'he':
+                product.nameHE? setProductName(product.nameHE) : setProductName(product.name);
+                break;
+            case 'fr':
+                product.nameFR? setProductName(product.nameFR) : setProductName(product.name);
+                break;
+            case 'en':
+                product.nameEN? setProductName(product.nameEN) : setProductName(product.name);
+                break;
+            default: {
+                setProductName(product.name);
+            }
+        }
+    },[language]);
+
+
+    //console.log(productName);
+
 
     return (
         <>
             <Card className={classes.root} onClick={() => setOpen(true)}>
                 <CardActionArea>
+                    {loadingMEdia && <Skeleton animation="wave" variant="rect" width="100%" height={180} />}
                     <CardMedia
                         component="img"
-                        alt="Contemplative Reptile"
+                        alt={productName}
                         height="180"
                         src={product.photo}
+                        style={{ display: loadingMEdia ? 'none' : 'block' }}
                         className={classes.img}
-                        title="Contemplative Reptile"
+                        title={productName}
+                        onLoad={handleImageLoaded}
                     />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
-                            {product.name}
+                            {loadingMEdia ? <Skeleton /> : productName.length > 18 ? productName.slice(0, 18) + '...' : productName}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="p">
-                            {product.description}
+                            {loadingMEdia ? <Skeleton /> : product.description}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="p">
-                            {product.price} ₪
+                            {loadingMEdia ? <Skeleton /> : `${product.price} ₪`}
                         </Typography>
                     </CardContent>
                 </CardActionArea>
@@ -184,8 +255,11 @@ export default function ImgMediaCard({ product }) {
                
             </CardActions> */}
             </Card>
-            <ProductDialog product={product} open={open} onClose={() => setOpen(false)} />
-
+            <ProductDialog product={product} t={t} productName={productName}  open={open} onClose={() => setOpen(false)} setSnack={(val) => setOpenSnack(val)} />
+            <SnackBar open={openSnack}  success={true} duration={1000} positon={{ vertical: 'top', horizontal: 'center' }} handleClose={() => setOpenSnack(false)} message={`add to shopping cart`} />
         </>
     );
 }
+
+
+export default withNamespaces()(ImgMediaCard);

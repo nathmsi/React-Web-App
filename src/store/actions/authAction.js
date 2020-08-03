@@ -44,13 +44,39 @@ export const passwordChanged = (text) => {
 
 
 
+export const createUser = ({ email, password , username }) => {
+    return (dispatch) => {
+        dispatch({
+            type: LOGIN_USER
+        });
+        firebase.auth().createUserWithEmailAndPassword(email.replace(/\s/g, ''), password)
+            .then(async (user) => {
+                firebase.auth().currentUser.updateProfile({
+                    displayName: username
+                }).then(
+                    () => {
+                        dispatch({
+                            type: LOGIN_USER_SUCCESS,
+                            payload: user.user
+                        });
+                    })
+            })
+            .catch(err => {
+                dispatch({
+                    type: LOGIN_USER_FAIL,
+                    payload: err.toString()
+                });
+            })
+    }
+}
+
 
 export const loginUser = ({ email, password }) => {
     return (dispatch) => {
         dispatch({
             type: LOGIN_USER
         });
-            firebase.auth().signInWithEmailAndPassword(email.replace(/\s/g, ''), password)
+        firebase.auth().signInWithEmailAndPassword(email.replace(/\s/g, ''), password)
             .then(async (user) => {
                 dispatch({
                     type: LOGIN_USER_SUCCESS,
@@ -144,44 +170,44 @@ export const tryLocalSignin = () => {
 
 // load seach product list
 
-const loadListSearchProduct = () => {
-    return new Promise(
-        (resolve, reject) => {
-            yelp.get('/menu/products-search')
-                .then(
-                    (response) => {
-                        const dataR = response.data ? response.data : [];
-                        resolve(dataR);
-                    }
-                )
-                .catch(error => {
-                    resolve([]);
-                    console.log(error);
-                })
-        }
-    )
-}
+// const loadListSearchProduct = () => {
+//     return new Promise(
+//         (resolve, reject) => {
+//             yelp.get('/menu/products-search')
+//                 .then(
+//                     (response) => {
+//                         const dataR = response.data ? response.data : [];
+//                         resolve(dataR);
+//                     }
+//                 )
+//                 .catch(error => {
+//                     resolve([]);
+//                     console.log(error);
+//                 })
+//         }
+//     )
+// }
 
 
 
-const getMainMenus = (dispatch) => {
-    try{
-        
-            firebase.database().ref('/products-menu')
-                .on('value',
-                    (data) => {
-                        const dataR = data.val() ? data.val() : [];
-                        console.log(dataR);
-                        dispatch({
-                            type: MENU_CATEGORIES,
-                            payload:  dataR
-                        })
-                    },
-                    (error) => {
-                        console.log(error);
-                    }
-                )
-    }catch(err){
-        console.log(err);
-    }
-}
+// const getMainMenus = (dispatch) => {
+//     try{
+
+//             firebase.database().ref('/products-menu')
+//                 .on('value',
+//                     (data) => {
+//                         const dataR = data.val() ? data.val() : [];
+//                         console.log(dataR);
+//                         dispatch({
+//                             type: MENU_CATEGORIES,
+//                             payload:  dataR
+//                         })
+//                     },
+//                     (error) => {
+//                         console.log(error);
+//                     }
+//                 )
+//     }catch(err){
+//         console.log(err);
+//     }
+// }

@@ -14,7 +14,7 @@ module.exports = () => {
 
 
   return {
-    devtool: 'inline-source-map',
+    devtool : 'inline-source-map',
     module: {
       rules: [
         {
@@ -49,11 +49,8 @@ module.exports = () => {
       new HtmlWebPackPlugin({
         template: "./src/index.html",
         filename: "./index.html",
-        favicon: './src/assets/Inventicon.ico'
+        favicon: './src/assets/icon.png'
       }),
-      new webpack.ExternalsPlugin('commonjs', [
-        'electron'
-      ]),
       new webpack.DefinePlugin(envKeys)
     ],
     resolve: {

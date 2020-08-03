@@ -1,0 +1,43 @@
+{
+    "Welcome": "Bienvenue",
+    "Home": "Accueil",
+    "Contact Me": "Contacter Nous",
+    "About": "Decouvrire",
+    "Dark Mode": "Mode Sombre",
+    "Sign In": "Se Connecter",
+    "Sign Out": "Se Deconnecter",
+    "Books": "Livres",
+    "Search Products": "Recherche Produits",
+    "Products": "Produits",
+
+    "Your Name": "Votre Nom",
+    "Email": "Mail",
+    "Mobile": "Numero de telephone",
+    "Subject": "Sujet",
+    "Your Message": "Votre Message",
+    "Send": "Envoyée",
+
+    "Shopping Cart": "Panier",
+    "Not Product Found !": "Pas de Produit Dans Le Panier !",
+    "You don't have element in your shopping cart": "Vous n'avez pas de produit dans votre panier",
+    "Check Order": "Proceder au payment",
+    "count": "quantite",
+
+    "User Profile": "Profil utilisateur",
+    "Edit Image": "Modifier l'image de profil",
+
+    "Total": "Totale",
+    "Name And Email": "Nom Et Email",
+    "Mobile And Address": "Mobile Et Addresse",
+    "Next": "Suivant",
+    "Back": "Precedant",
+
+
+    "Password": "Mot De Passe",
+    "Don't have an account? Sign up": "Vous n'avez pas de compte? Creer un compte",
+    "Already have an account? Sign in": "Vous avez un compte? connectez-vous",
+    "Sign in": "Conneter Vous",
+    "Last Name": "Nom de famille",
+    "Sign Up": "S'enregistrer"
+
+}

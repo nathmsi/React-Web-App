@@ -27,8 +27,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 import { Context as StoreContext } from '../../contexts/StoreContext';
+import { withNamespaces } from 'react-i18next';
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import {
     pushToShoppingCart
@@ -61,10 +62,10 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function OrderDialogu(props) {
+function OrderDialogue(props) {
 
-    
-    const{
+
+    const {
         createNewOrder,
         loading,
         errorMessage,
@@ -84,6 +85,10 @@ export default function OrderDialogu(props) {
         open
     } = props;
 
+    const {
+        user
+    } = useSelector(state => state.auth);
+
     const handleClose = () => {
         onClose();
     };
@@ -100,7 +105,14 @@ export default function OrderDialogu(props) {
         createNewOrder(obj);
         console.log(obj);
     }
-    
+
+    React.useEffect(() => {
+        if (success) {
+            handleClose();
+
+        }
+    }, [success]);
+
 
     return (
         <Dialog
@@ -114,12 +126,12 @@ export default function OrderDialogu(props) {
                 <List dense={true}>
                     <ListItem   >
                         <ListItemText
-                            primary={'count ' + total.totalCount}
-                            secondary={' Total ' +total.totalPrice + ' ₪'}
+                            primary={ props.t("count") + ' ' + total.totalCount}
+                            secondary={ props.t("Total") + ' ' + total.totalPrice + ' ₪'}
                         />
                         <ListItemSecondaryAction>
                             <IconButton
-                                color="secondary"
+                                color="inherit"
                                 onClick={onClose}
                             >
                                 <CloseIcon />
@@ -129,8 +141,13 @@ export default function OrderDialogu(props) {
                 </List>
             </DialogTitle>
             <DialogContent style={{ padding: 0 }}>
-                <OrderForm createNewOrder={createOrder} loading={loading} errorMessage={errorMessage} success={success} total={total.totalPrice}  />
+                {
+                    user &&
+                    <OrderForm t={props.t} createNewOrder={createOrder} positon={{ vertical: 'bottom', horizontal: 'right' }} name={user.displayName} email={user.email} loading={loading} errorMessage={errorMessage} success={success} total={total.totalPrice} />
+                }
             </DialogContent>
         </Dialog>
     );
 }
+
+export default withNamespaces()(OrderDialogue);

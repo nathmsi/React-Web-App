@@ -5,13 +5,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-import { useLocation ,useHistory } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 
 import { Typography } from '@material-ui/core';
+import { withNamespaces } from 'react-i18next';
 
 
 // redux
-import { useSelector , useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import {
     getProductsHome,
     getMenu,
@@ -28,16 +29,16 @@ const useStyles = makeStyles((theme) => ({
         minWidth: 120,
     },
     select: {
-        color: theme.palette.primary.main,
+        color: theme.palette.background.main, // theme.palette.primary.main,
         "&:before": {
-            borderColor: theme.palette.secondary.main
+            borderColor: theme.palette.background.main
         },
         "&:after": {
-            borderColor: theme.palette.secondary.main
+            borderColor: theme.palette.background.main
         }
     },
     icon: {
-        fill: theme.palette.secondary.main,
+        fill: theme.palette.background.main,
     },
 }));
 
@@ -49,26 +50,28 @@ function ControlledOpenSelect(props) {
 
     const [open, setOpen] = React.useState(false);
 
+
     const dispatch = useDispatch();
-    const{
+    const {
         categorieSelected,
         menu
     } = useSelector(state => state.product);
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         //console.log('getMenu()');
+        console.log('getMenu');
         dispatch(getMenu());
-    },[]);
+    }, []);
 
     const handleChange = (event) => {
         const myLoacation = location.pathname;
         //console.log(myLoacation);
-        if(event.target.value === 'Home'){
+        if (event.target.value === 'Home') {
             dispatch(getProductsHome());
-        }else{
+        } else {
             dispatch(getProductsByCategorie(event.target.value));
         }
-        if( myLoacation !== '/store/home'){
+        if (myLoacation !== '/store/home') {
             history.push('/store/home');
         }
     };
@@ -81,38 +84,45 @@ function ControlledOpenSelect(props) {
         setOpen(true);
     };
 
+
     return (
-        <div>
-            <FormControl className={classes.formControl} >
-                <Select
-                    labelId="demo-controlled-open-select-label"
-                    id="demo-controlled-open-select"
-                    open={open}
-                    onClose={handleClose}
-                    onOpen={handleOpen}
-                    value={categorieSelected}
-                    onChange={handleChange}
-                    className={classes.select}
-                    inputProps={{
-                        classes: {
-                            icon: classes.icon,
-                        },
-                    }}
-                    color="secondary"
-                >
-                    {
-                        menu.map(
-                            el => <MenuItem  color="secondary" key={el} value={el}>
-                                <Typography align="center"  color="secondary">{el}</Typography>
-                            </MenuItem>
-                        )
-                    }
-                </Select>
-            </FormControl>
+        <div style={{  height: '53px' }}>
+            <div style={{ display: props.hide ? 'none' : 'block'}}>
+                {
+                    (menu && menu.length > 1) ?
+                        <FormControl className={classes.formControl} >
+                            <Select
+                                labelId="demo-controlled-open-select-label"
+                                id="demo-controlled-open-select"
+                                open={open}
+                                onClose={handleClose}
+                                onOpen={handleOpen}
+                                value={categorieSelected}
+                                onChange={handleChange}
+                                className={classes.select}
+                                inputProps={{
+                                    classes: {
+                                        icon: classes.icon,
+                                    },
+                                }}
+                                color="secondary"
+                            >
+                                {
+                                    menu.map(
+                                        el => <MenuItem key={el} value={el} align="center">
+                                            <Typography align="center" color="inherit" >{props.t(el)}</Typography>
+                                        </MenuItem>
+                                    )
+                                }
+                            </Select>
+                        </FormControl>
+                        : null
+                }
+            </div>
         </div>
     );
 }
 
 
 
-export default  ControlledOpenSelect;
+export default withNamespaces()(ControlledOpenSelect);

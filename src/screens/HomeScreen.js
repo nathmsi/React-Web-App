@@ -26,7 +26,12 @@ import {
 } from '../store/actions';
 
 
-import { useLocation, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
+
+
+import { withNamespaces } from 'react-i18next';
+
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,15 +40,16 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.default
     },
     media: {
-        height: '50vh',
+        height: '60vh',
     },
     card: {
         //position: 'relative',
     },
     overlay: {
         position: 'absolute',
-        width: props => props.width,
-        height: props => props.height,
+        width: props => props.width - 20,
+        marginLeft: 10,
+        height: '60vh',
         display: 'flex',
         flexDirection: 'column',
         flexWrap: 'nowrap',
@@ -54,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
         left: 0,
     },
     title: {
+        color: '#FFF',
         fontSize: '65px',
         fontWeight: 600
     },
@@ -63,12 +70,22 @@ const useStyles = makeStyles((theme) => ({
         alignContent: 'center'
     },
     container: {
-        marginTop: 20
+        marginTop: 20,
+    },
+    grid: {
+        margin: 0,
+        padding: 0
+    },
+    subTitle:{
+        color: '#FFF',
+        fontSize: '35px',
+        fontWeight: 600
     }
 }));
 
 
-const HomeScreen = () => {
+const HomeScreen = (props) => {
+
     const {
         width,
         height
@@ -77,9 +94,10 @@ const HomeScreen = () => {
     const classes = useStyles({ width, height: contentHeight });
     let history = useHistory();
     const {
-        menu , menuCategorie
+        menu, menuCategorie
     } = useSelector(state => state.product);
     const dispatch = useDispatch();
+
 
 
 
@@ -101,24 +119,24 @@ const HomeScreen = () => {
                 <CardMedia image={Magazin1} className={classes.media} />
                 <div className={classes.overlay}>
                     <Typography color="primary" className={classes.title}>
-                        Saba Israel
+                       {props.t('Saba Israel')}
                     </Typography>
-                    <Typography color="primary" >
-
+                    <Typography color="primary" className={classes.subTitle}>
+                        {props.t('Welcome')}
                     </Typography>
                 </div>
             </Card>
             <Container maxWidth="lg" className={classes.container}>
-                        <Grid
-                            container
-                            spacing={2}
-                        >
-                            {menuCategorie.map(elem => (
-                                <Grid item xs={width < 1200 ? (width < 900 ? (width < 600 ? 12 : 6) : 4) : 3} key={elem.categorie} className={classes.item}>
-                                    <MenuView menu={elem.categorie} handleSubmit={(val) => handleSubmit(val)} />
-                                </Grid>
-                            ))}
+                <Grid
+                    container
+                    spacing={2}
+                >
+                    {menuCategorie ? <> {menuCategorie.map(elem => (
+                        <Grid item xs={width < 1200 ? (width < 900 ? (width < 600 ? 12 : 6) : 4) : 3} key={elem.categorie} className={classes.item}>
+                            <MenuView  menu={elem.categorie} handleSubmit={(val) => handleSubmit(val)} />
                         </Grid>
+                    ))} </> : null}
+                </Grid>
             </Container>
         </div>
     )
@@ -126,4 +144,4 @@ const HomeScreen = () => {
 
 
 
-export default HomeScreen;
+export default withNamespaces()(HomeScreen);

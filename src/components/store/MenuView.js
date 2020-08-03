@@ -41,6 +41,11 @@ import Tallits from '../../assets/menu/Tallits.jpg';
 import Klafims from '../../assets/menu/Klafims.jpg';
 import Breslev from '../../assets/menu/Breslev.jpg';
 
+
+import { withNamespaces } from 'react-i18next';
+
+
+
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="left" ref={ref} {...props} />;
 });
@@ -49,7 +54,6 @@ const useStyles = makeStyles((theme) => ({
     root: {
         //width: 300,
         flexGrow: 1,
-        margin: 0
     },
     rootDialog: {
         // width: props => props.width * (9 / 10),
@@ -88,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function ImgMediaCard({ menu, handleSubmit }) {
+function MenuView({ t , menu, handleSubmit }) {
 
     const classes = useStyles();
     const theme = useTheme();
@@ -100,7 +104,7 @@ export default function ImgMediaCard({ menu, handleSubmit }) {
                 <CardActionArea className={classes.content}>
                     <CardContent>
                         <Typography variant="h5" align="center" >
-                            {menu}
+                            {t(menu)}
                         </Typography>
                     </CardContent>
                     <CardMedia
@@ -153,4 +157,7 @@ const GetImage = (menu) => {
         return Kippots;
     }
 }
+
+
+export default withNamespaces()(MenuView);
 

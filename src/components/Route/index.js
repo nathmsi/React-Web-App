@@ -1,11 +1,12 @@
 import React from "react";
 import NavLinkOption from './navLink';
 
-import MainStore from '../store/MainStore';
+import MainStore from '../../screens/StoreScreen';
 import AboutScreen from '../../screens/AboutScreen';
 import ContactMeScreen from '../../screens/ContactMeScreen';
 import LoginUserScreen from '../../screens/LoginUserScreen';
 import HomeScreen from '../../screens/HomeScreen';
+
 
 import { Switch, Route } from 'react-router-dom';
 

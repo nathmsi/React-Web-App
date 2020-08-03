@@ -2,7 +2,7 @@ import createDataContext from './createDataContext'
  
 
 
-const stockReducer = (state, action) => {
+const Reducer = (state, action) => {
     switch (action.type) {
         case 'set_color':
             const theme = state.theme;
@@ -10,6 +10,8 @@ const stockReducer = (state, action) => {
             return { ...state, theme: { ...theme } }
         case 'toogle_dark_mode':
             return { ...state, theme: action.payload !== 'dark' ? { ...themeNotDark } : { ...themeDark } }
+        case 'set_language':
+            return { ...state, language: action.payload }
         default: return state;
     }
 }
@@ -26,44 +28,6 @@ const toogleDarkMode = (dispatch) => {
 }
 
 
-const setColorNoir = (dispatch) => {
-    return () => {
-        DispatchTeme(dispatch, 'ColorNoir');
-    };
-};
-
-const setColorBlue = (dispatch) => {
-    return () => {
-        DispatchTeme(dispatch, 'ColorBlue');
-    };
-};
-
-
-
-const setTheme = (dispatch) => {
-    return (theme) => {
-        DispatchTeme(dispatch, theme);
-    };
-};
-
-const DispatchTeme = (dispatch, theme) => {
-    localStorage.setItem('theme', theme);
-    switch (theme) {
-        case 'ColorNoir': {
-            dispatch({ type: 'set_color', payload: '#000' });
-            break;
-        }
-        case 'ColorBlue': {
-            dispatch({ type: 'set_color', payload: '#fafafa' });
-            break;
-        }
-        default: {
-            dispatch({ type: 'set_color', payload: { theme: '#fafafa' } });
-            break;
-        }
-    }
-}
-
 const themeDark = {
     palette: {
         primary: {
@@ -75,9 +39,10 @@ const themeDark = {
             secondary: '#fafafa'
         },
         secondary: {
-            main: '#fafafa',
+            main: '#424242',
         },
         background: {
+            main: '#fff'
         },
         type: "dark"
     }
@@ -86,20 +51,30 @@ const themeDark = {
 const themeNotDark = {
     palette: {
         primary: {
-            main: '#fafafa',
-            default: '#407294',
+            main: '#0E2F44',
+            default: '#0E2F44',
         },
         secondary: {
-            main: '#407294',
+            main: '#0E2F44',
         },
         text: {
-            primary: '#407294',
-            secondary: '#407294'
+            primary: '#0E2F44',
+            secondary: '#0E2F44'
         },
         background: {
-            main: '#407294'
+            main: '#fff'
         },
         type: "light"
+    }
+}
+
+const setLanguage = (dispatch) => {
+    return (language) => {
+        localStorage.setItem('language', language);
+        dispatch({ 
+            type: 'set_language',
+            payload: language
+        })
     }
 }
 
@@ -108,14 +83,16 @@ const themeNotDark = {
 
 
 export const { Context, Provider } = createDataContext(
-    stockReducer,
+    Reducer,
     {
-        setColorBlue,
-        setColorNoir,
-        setTheme,
-        toogleDarkMode
+        toogleDarkMode,
+        setLanguage
     },
     {
-        theme: themeDark
+        theme: themeDark,
+        language: 'en',
+        menuLanguages: [
+            'en', 'fr' , 'he'
+        ]
     }
 );

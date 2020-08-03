@@ -9,6 +9,8 @@ const ThemeColorReducer = (state, action) => {
             return { ...state,  openSH: action.payload.openSH };
         case 'set_user':
             return { ...state,  openUser: action.payload.open };
+        case 'set_colapse_menu':
+            return { ...state,  openCollspseMenu: action.payload.open };
         default: return state;
     }
 }
@@ -40,18 +42,26 @@ const setOpenUser = (dispatch) => {
     }
 };
 
-
+const setOpenCollspseMenu = (dispatch) => {
+    return async (open) => {
+        dispatch({
+            type: 'set_colapse_menu', payload: { open }
+        });
+    }
+};
 
 export const { Context, Provider } = createDataContext(
     ThemeColorReducer,
     {
         setOpen,
         setOpenSH,
-        setOpenUser
+        setOpenUser,
+        setOpenCollspseMenu
     },
     {
         open: false,
         openSH: false,
-        openUser: false
+        openUser: false,
+        openCollspseMenu: true
     }
 );

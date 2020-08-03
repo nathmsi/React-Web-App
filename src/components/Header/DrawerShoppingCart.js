@@ -20,12 +20,14 @@ import TextField from '@material-ui/core/TextField';
 
 import useWindowsDimention from '../../hooks/useWindowsDimention';
 
-import { IconButton, Typography } from '@material-ui/core';
+import { IconButton, Typography, Tooltip } from '@material-ui/core';
 
 import { Context as ContextDrawer } from '../../contexts/navigationContext';
-import { Context as StoreContext } from '../../contexts/StoreContext';
 
 import OrderDialog from '../store/OrderDialog';
+
+import { withNamespaces } from 'react-i18next';
+
 
 // redux
 import { useSelector, useDispatch } from 'react-redux'
@@ -61,7 +63,7 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.secondary.main
     },
     navLinkActive: {
-        color: theme.palette.secondary.main,
+        //color: theme.palette.secondary.main,
         backgroundColor: theme.palette.action.hover
     },
     titleDrawer: {
@@ -75,10 +77,15 @@ const useStyles = makeStyles(theme => ({
     listProduct: {
         height: props => props.height - 156,
         overflow: 'auto',
+    },
+    rightContent: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center'
     }
 }));
 
-export default function TemporaryDrawer() {
+function DrawerShoppingCart(props) {
     const {
         width, height
     } = useWindowsDimention();
@@ -114,6 +121,7 @@ export default function TemporaryDrawer() {
     const {
         isAuth
     } = useSelector(state => state.auth);
+
     const openOrder = () => {
         if (isAuth) {
             setOpen(true);
@@ -143,27 +151,27 @@ export default function TemporaryDrawer() {
 
 
     return (
-        <Drawer anchor={'right'} open={openSH} onClose={toggleDrawer}   style={{  opacity: 0.95  }} >
+        <Drawer anchor={'right'} transitionDuration={500} open={openSH} onClose={toggleDrawer} style={{ opacity: 0.97 }} >
             <div>
                 <List className={classes.titleStyle}>
                     <ListItem className={classes.headerClose} className={classes.titleDrawer} >
                         <ListItemIcon >
                             <IconButton
-                                color="secondary"
+                                color="inherit"
                                 onClick={toggleDrawer}
                             >
                                 <CloseIcon />
                             </IconButton>
                         </ListItemIcon>
                         <ListItemText>
-                            <Typography
-                                variant="h6"
-                                color="secondary"
-                                style={{
-                                }}
-                            >
-                                {'Shopping Cart'}
-                            </Typography>
+                            <Button onClick={toggleDrawer} style={{ textTransform: 'none' }}>
+                                <Typography
+                                    variant="h6"
+                                    color="inherit"
+                                >
+                                    {props.t('Shopping Cart')}
+                                </Typography>
+                            </Button>
                         </ListItemText>
                     </ListItem>
                 </List>
@@ -172,7 +180,7 @@ export default function TemporaryDrawer() {
             <div >
                 <div >
                     {
-                        shoppingCart.length > 0 ?
+                        (shoppingCart && shoppingCart.length > 0) ?
                             < List className={classes.listProduct}>
                                 {shoppingCart.map(
                                     product => (
@@ -185,6 +193,7 @@ export default function TemporaryDrawer() {
                                                 secondary={(product.price * product.count) + ' ₪'}
                                             />
                                             <ListItemSecondaryAction>
+                                                <div className={classes.rightContent}>
                                                 <TextField
                                                     type="number"
                                                     value={product.count}
@@ -192,12 +201,13 @@ export default function TemporaryDrawer() {
                                                     InputProps={{
                                                         inputProps: {
                                                             max: 99, min: 1,
-                                                        }
+                                                        },
                                                     }}>
                                                 </TextField>
                                                 <IconButton edge="end" aria-label="delete" onClick={() => dispatch(deleteOneShoppingCart(product.id))}>
                                                     <DeleteIcon />
                                                 </IconButton>
+                                                </div>
                                             </ListItemSecondaryAction>
                                         </ListItem>
                                     )
@@ -205,11 +215,11 @@ export default function TemporaryDrawer() {
                                 }
                             </List>
                             :
-                                <div className={classes.listContent}>
-                                    <Typography align="center" variant="h5" >
-                                        Not Product Found !
+                            <div className={classes.listContent}>
+                                <Typography align="center" variant="h5" >
+                                    {props.t('Not Product Found !')}
                                 </Typography>
-                                </div>
+                            </div>
                     }
 
                 </div>
@@ -218,15 +228,25 @@ export default function TemporaryDrawer() {
                     <List dense={false}>
                         <ListItem   >
                             <ListItemText
-                                primary={'count ' + total.totalCount}
+                                primary={ props.t("count") +  ' ' + total.totalCount}
                                 secondary={total.totalPrice + ' ₪'}
                             />
                             <ListItemSecondaryAction>
-                                <Button onClick={() => openOrder()}>
-                                    <Typography >
-                                        Check Order
+                                {
+                                    shoppingCart.length < 1 ?
+                                        <Tooltip title={props.t("You don't have element in your shopping cart")} >
+                                            <span>
+                                                <Button disabled>{props.t("Check Order")}</Button>
+                                            </span>
+                                        </Tooltip>
+                                        :
+                                        <Button onClick={() => openOrder()} >
+                                            <Typography >
+                                            {props.t("Check Order")}
                                     </Typography>
-                                </Button>
+                                        </Button>
+                                }
+
                                 <IconButton edge="end" aria-label="delete" onClick={() => dispatch(deleteAllShoppingCart())}>
                                     <DeleteIcon />
                                 </IconButton>
@@ -239,3 +259,6 @@ export default function TemporaryDrawer() {
         </Drawer >
     );
 }
+
+
+export default withNamespaces()(DrawerShoppingCart);

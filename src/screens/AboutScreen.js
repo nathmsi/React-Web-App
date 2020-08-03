@@ -10,8 +10,18 @@ import {
 
 import useWindowDimention from '../hooks/useWindowsDimention';
 
-import Magazin1 from '../assets/magazin2.jpg';
+import magazin2 from '../assets/magazin2.jpg';
 
+import map from '../assets/map.png';
+
+import magazin5 from '../assets/magazin5.jpeg';
+import magazin6 from '../assets/magazin6.jpeg';
+import magazin7 from '../assets/magazin7.jpeg';
+import magazin8 from '../assets/magazin8.jpeg';
+
+import { withNamespaces } from 'react-i18next';
+
+import CarouselComponent from '../components/Carousel/CarouselComponent';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -20,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.default
     },
     media: {
-        height: props => props.height,
+        height:  '40vh',
     },
     card: {
         position: 'relative',
@@ -28,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     overlay: {
         position: 'absolute',
         width: props => props.width,
-        height: props => props.height,
+        height:  '40vh',
         display: 'flex',
         flexDirection: 'column',
         flexWrap: 'nowrap',
@@ -39,8 +49,19 @@ const useStyles = makeStyles((theme) => ({
         left: 0,
     },
     title: {
+        color: '#FFF',
         fontSize: '65px',
         fontWeight: 600
+    },
+    subTitle: {
+        position: 'absolute',
+        width: props => props.width,
+        display: 'flex',
+        flexDirection: 'column',
+        flexWrap: 'nowrap',
+        justifyContent: 'center',
+        bottom: 0,
+        left: 0,
     }
 }));
 
@@ -58,21 +79,25 @@ const AboutScreen = (props) => {
     return (
         <div className={classes.content}>
             <Card className={classes.card}>
-                <CardMedia image={Magazin1} className={classes.media} />
+                <CardMedia image={magazin2} className={classes.media} />
                 <div className={classes.overlay}>
                     <Typography color="primary" className={classes.title}>
-                        About
+                      {props.t("About")}
                     </Typography>
-                    <Typography color="primary" >
-                        
+                    <div className={classes.subTitle}>
+                    <Typography  align="center" variant="h6" style={{ fontWeight: 600  , color: '#FFF' }} >
+                    {props.t("Agripas 69 , Jerusalem ")}
                     </Typography>
                 </div>
+                </div>
             </Card>
-            <iframe width="100%" height={contentHeight - 20} frameBorder="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1695.7562059827264!2d35.212484535304704!3d31.78378214880525!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1502d62837961f95%3A0xd3f9d1148b164446!2sAgripas%20St%2069%2C%20Jerusalem!5e0!3m2!1sfr!2sil!4v1585495183413!5m2!1sfr!2sil"  ></iframe>
+            <CardMedia image={map} className={classes.media} />
+            <CarouselComponent />
+
         </div>
     )
 }
 
 
 
-export default AboutScreen;
+export default withNamespaces()(AboutScreen);

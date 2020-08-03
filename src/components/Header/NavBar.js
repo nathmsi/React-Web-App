@@ -17,10 +17,15 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Slide from '@material-ui/core/Slide';
 import Grow from '@material-ui/core/Grow';
+
 import PersonIcon from '@material-ui/icons/Person';
 
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
+
+import {
+    TextField, useTheme, InputAdornment
+} from '@material-ui/core';
 
 import { Context as ContextNavigation } from '../../contexts/navigationContext';
 
@@ -35,6 +40,7 @@ import useWindowDimensions from "../../hooks/useWindowsDimention";
 
 import { useLocation, useHistory } from 'react-router-dom'
 
+import { withNamespaces } from 'react-i18next';
 
 
 // redux
@@ -54,14 +60,24 @@ const useStyles = makeStyles(theme => ({
         // [theme.breakpoints.up("sm")]: {
         //     display: "block"
         // },
-        marginRight: theme.spacing(2)
     },
     input: {
-        padding: '1px 2px',
-        marginLeft: theme.spacing(1),
-        width: 160,
+        backgroundColor: theme.palette.background.default,
+        width: 140,
+    },
+    inputStyle: {
+        display: props => props.width < 600 ? 'none' : 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignContent: 'center',
+        flexWrap: 'nowrap',
+        borderRadius: 8,
+        backgroundColor: theme.palette.background.default,
+        paddingLeft: theme.spacing(2),
     },
     iconButton: {
+        marginLeft: 5,
         padding: 10,
     },
     divider: {
@@ -69,14 +85,25 @@ const useStyles = makeStyles(theme => ({
         margin: 4,
         color: theme.palette.secondary.main,
     },
+    search: {
+        // display: 'flex',
+        // flexDirection: 'row',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // alignContent: 'center',
+        // border: 'solid 1px  red',
+        // flexWrap: 'nowrap',
+    }
 }));
 
-export default function PrimarySearchAppBar(props) {
-    const classes = useStyles();
+function NavBar(props) {
+    const theme = useTheme();
     const {
         width
     } = useWindowDimensions();
-    const [openSearch, setOpenSearch] = React.useState(false);
+    const classes = useStyles({ width });
+
+    const [openSearch, setOpenSearch] = React.useState(true);
     const {
         state: { },
         setOpen,
@@ -103,7 +130,7 @@ export default function PrimarySearchAppBar(props) {
         <div className={classes.grow}>
             <AppBar
                 position="fixed"
-                color="inherit"
+                color="secondary"
                 style={{
                     opacity: 0.8
                 }}
@@ -118,28 +145,31 @@ export default function PrimarySearchAppBar(props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    {(width > 500) ?
-                        <Button onClick={handleTitleClicked} style={{ textTransform: 'none' }}>
-                            <Typography className={classes.title} variant="h6" noWrap>
-                                Saba Israel
-                    </Typography>
-                        </Button>
-                        : null}
-                    {(!openSearch || width > 500) ? <SelectCategorie /> : null}
+                    
+                    <Button onClick={handleTitleClicked} style={{ textTransform: 'none' }} color="inherit"  >
+                        <Typography className={classes.title} align="center" color="inherit" >
+                            {props.t("Saba Israel")}
+                        </Typography>
+                    </Button>
+
+                    <SelectCategorie hide={(width < 690)} />
+
+
                     <div className={classes.grow} />
-                    <Grow direction="left" in={openSearch} timeout={600}>
+
+
+                    <div className={classes.inputStyle}  >
                         <InputBase
                             className={classes.input}
-                            placeholder="Search Products"
-                            color="secondary"
-                            autoFocus={true}
-                            onBlur={() => setOpenSearch(!openSearch)}
+                            placeholder={props.t("Search Products")}
                         />
-                    </Grow>
-                    <IconButton color="primary" type="submit" className={classes.iconButton} aria-label="search" onClick={() => setOpenSearch(!openSearch)}>
-                        <SearchIcon color="secondary" />
-                    </IconButton>
-                    {/* <Divider className={classes.divider} orientation="vertical" /> */}
+                        <IconButton type="submit" className={classes.iconButton} onClick={() => setOpenSearch(!openSearch)}>
+                            <SearchIcon />
+                        </IconButton>
+                    </div>
+
+
+
                     {isAuth ?
                         <IconButton
                             color="inherit"
@@ -158,7 +188,12 @@ export default function PrimarySearchAppBar(props) {
                         onClick={() => setOpenSH(true)}
                         className={classes.iconButton}
                     >
-                        <Badge badgeContent={shoppingCart.length} color="secondary" >
+                        <Badge
+                            badgeContent={
+                                <Typography>
+                                    {shoppingCart.length}
+                                </Typography>
+                            } color="secondary"  >
                             <ShoppingCartIcon color="inherit" />
                         </Badge>
                     </IconButton>
@@ -168,3 +203,5 @@ export default function PrimarySearchAppBar(props) {
     );
 }
 
+
+export default withNamespaces()(NavBar);

@@ -4,7 +4,8 @@
   "description": "app mag",
   "scripts": {
     "build": "webpack --mode production",
-    "start": "webpack-dev-server  --open --mode development "
+    "start": "webpack-dev-server  --open -d --mode development ",
+    "test": "jest"
   },
   "keywords": [],
   "author": "nathan",
@@ -14,11 +15,17 @@
     "@babel/core": "^7.10.0",
     "@babel/preset-env": "^7.10.0",
     "@babel/preset-react": "^7.10.0",
+    "@types/jest": "^26.0.3",
     "babel-cli": "^6.26.0",
+    "babel-jest": "^26.1.0",
     "babel-loader": "^8.1.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "file-loader": "^6.0.0",
     "html-loader": "^1.1.0",
     "html-webpack-plugin": "^4.3.0",
+    "jest": "^26.1.0",
+    "jest-enzyme": "^7.1.2",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "url-loader": "^4.1.0",
     "wait-on": "^5.0.0",
@@ -32,18 +39,36 @@
     "@material-ui/lab": "^4.0.0-alpha.54",
     "axios": "^0.19.2",
     "babel-preset-react": "^6.24.1",
+    "detect-browser-language": "0.0.2",
     "dotenv": "^8.2.0",
     "firebase": "^7.14.5",
+    "i18next": "^19.5.1",
+    "i18next-browser-languagedetector": "^5.0.0",
+    "i18next-http-backend": "^1.0.15",
     "material-table": "^1.59.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-draggable": "^4.4.2",
+    "react-i18next": "^9.0.10",
     "react-redux": "^7.2.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
+    "react-swipeable-views": "^0.13.9",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "remote": "^0.2.6"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less|scss|sass)$": "<rootDir>/__mocks__/styleMock.js"
+    },
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/test/setupTests.js"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules/"
+    ]
   }
 }

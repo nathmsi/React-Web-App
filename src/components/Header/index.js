@@ -69,8 +69,9 @@ const HeaderComponent = (props) => {
         height
     });
     const {
-        state: { open },
-        setOpen
+        state: { open , openCollspseMenu },
+        setOpen,
+        setOpenCollspseMenu
     } = React.useContext(ContextNavigation);
 
     const signOut = () => {
@@ -97,8 +98,8 @@ const HeaderComponent = (props) => {
                 onClose={toggleDrawer(false)}
                 onOpen={toggleDrawer(true)}
             >
-                <DrawerContent toggleDrawer={() => setOpen(false)} isAuth={props.isAuth} signOut={signOut}  />
-            </SwipeableDrawer>
+                <DrawerContent toggleDrawer={() => setOpen(false)} isAuth={props.isAuth} signOut={signOut}  openCollspseMenu={openCollspseMenu} setOpenCollspseMenu={setOpenCollspseMenu} />
+            </SwipeableDrawer> 
             <DrawerShoppingCart />
             <DrawerUserProfile />
         </>

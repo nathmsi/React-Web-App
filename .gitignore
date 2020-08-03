@@ -9,8 +9,16 @@ firebase-debug.log*
 # Firebase cache
 .firebase/
 
+package-lock.json
+.firebaserc
+firebase.json
+__mocks__
 /dist
 .env
+
+src/assets
+
+
 # Firebase config
 
 # Uncomment this if you'd like others to create their own Firebase project.

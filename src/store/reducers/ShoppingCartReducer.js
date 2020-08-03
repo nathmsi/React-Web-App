@@ -37,8 +37,10 @@ export default (state = INITIAL_STATE, action) => {
             const productsSH = state.shoppingCart.map(el => el);
             productsSH.forEach(el => {
                 if (el.id === action.payload.id) {
-                    if (action.payload.count > 0) {
+                    if (action.payload.count > -1 ) {
                         el.count = action.payload.count;
+                    }else{
+                        el.count = 0;
                     }
                 }
             })

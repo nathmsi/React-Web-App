@@ -4,7 +4,6 @@ import ReduxThunk from 'redux-thunk'
 import { interceptorsAxios } from '../../api/yelp'
 
 // persist redux store
-import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -23,9 +22,9 @@ const reducers = combineReducers({
 
 
 const rootPersistConfig = {
-    key: 'root',
+    key: 'persist-data',
     storage: storage,
-    blacklist: ['auth']
+    blacklist: ['auth'],
 }
 
 

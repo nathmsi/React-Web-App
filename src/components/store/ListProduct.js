@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Typography, Grid } from '@material-ui/core';
+import { Container, Grid } from '@material-ui/core';
 
 import ProductView from './ProductView';
 
@@ -8,7 +8,8 @@ import useWindowsDimention from '../../hooks/useWindowsDimention';
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        marginTop: 48 + 20,
+        position: 'relative',
+        marginTop: 20
     },
     item: {
         display: 'flex',
@@ -33,8 +34,8 @@ export default function TitlebarGridList(props) {
 
 
     return (
-        <Container maxWidth="lg" className={classes.container}>
-            <div className={classes.container}>
+        <Container maxWidth="lg"  className={classes.container} >
+            <div >
                 <Grid
                     container
                     spacing={2}

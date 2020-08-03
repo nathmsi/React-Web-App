@@ -2,6 +2,9 @@ import React from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
 
 import MuiAlert from '@material-ui/lab/Alert';
+import { IconButton } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -14,22 +17,28 @@ export default function PositionedSnackbar(props) {
         open,
         message,
         success,
-        handleClose
+        handleClose,
+        positon,
+        duration
     } = props;
-
-
 
 
     return (
         <Snackbar
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            anchorOrigin={positon}
             open={open}
             onClose={handleClose}
             autoHideDuration={2000}
-        >
-            <Alert onClose={handleClose} severity={success ? 'success' : 'error'}>
-                {message}
-            </Alert>
-        </Snackbar>
+            message={message ? message : undefined}
+            action={
+                <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    onClick={handleClose}
+                >
+                    <CloseIcon />
+                </IconButton>
+            }
+        />
     );
 }
